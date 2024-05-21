@@ -12,7 +12,7 @@ return new class () extends Migration {
     {
         Schema::create('histories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('unit_id')->constrained();
+            $table->morphs('historiable');
             $table->date('start_date');
             $table->date('end_date');
             $table->timestamps();

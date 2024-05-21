@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Admin\HistoryCrudController;
+use App\Models\Unit;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Route;
@@ -27,10 +28,14 @@ class UnitHistoriesCrudController extends HistoryCrudController
         CRUD::setRoute(config('backpack.base.route_prefix') . '/unit/' . $this->unit . '/histories');
 
         // show only that unit's histories
-        CRUD::addBaseClause(function (Builder $query) {
-            $query->whereHas('unit', function (Builder $query) {
-                $query->where('unit_id', $this->unit);
-            });
+       CRUD::addBaseClause(function (Builder $query) {
+            $query->whereHasMorph(
+                'historiable',
+                [Unit::class],
+                function ($query) {
+                    $query->where('historiable_id', $this->unit);
+                }
+            );
         });
     }
 }

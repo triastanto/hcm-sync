@@ -39,6 +39,7 @@ class UnitCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        CRUD::column('id');
         CRUD::column('name');
         CRUD::button('view_histories')->stack('line')->view('crud::buttons.quick')->meta([
             'access'  => true,
