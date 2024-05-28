@@ -7,12 +7,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-class Unit extends Model
+class Position extends Model
 {
     use CrudTrait;
     use HasFactory;
-
-    protected $guarded = [];
 
     public function histories() : MorphMany
     {

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\UnitRequest;
+use App\Models\History;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Http\Request;
 
 /**
  * Class UnitCrudController
@@ -47,7 +49,7 @@ class UnitCrudController extends CrudController
             'icon'    => 'la la-paw',
             'wrapper' => [
                 'href' => function ($entry, $crud) {
-                    return url($crud->route.'/'.$entry->getKey().'/histories');
+                    return url($crud->route . '/' . $entry->getKey() . '/histories');
                 },
                 'title' => 'View owner histories',
             ],
@@ -63,12 +65,33 @@ class UnitCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(UnitRequest::class);
-        CRUD::setFromDb(); // set fields from db columns.
+        CRUD::field('name');
+        CRUD::field('start_date')->type('date');
+        CRUD::field('end_date')->type('date');
 
-        /**
-         * Fields can be defined using the fluent syntax:
-         * - CRUD::field('price')->type('number');
-         */
+        CRUD::addSaveAction([
+            'name' => 'save_and_create_history',
+            'redirect' => function ($crud, $request, $itemId) {
+                return $crud->route;
+            },
+            'button_text' => 'Save and Create History',
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+
+        $unit = $this->crud->create($request->except(['start_date', 'end_date']));
+
+        $unit->histories()
+            ->save(new History(['start_date' => $request->start_date, 'end_date' => $request->end_date]));
+
+        return $this->crud->performSaveAction($unit->id);
     }
 
     /**

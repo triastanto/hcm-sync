@@ -12,6 +12,8 @@ class History extends Model
     use CrudTrait;
     use HasFactory;
 
+    protected $guarded = [];
+
     public function historiable(): MorphTo
     {
         return $this->morphTo();
