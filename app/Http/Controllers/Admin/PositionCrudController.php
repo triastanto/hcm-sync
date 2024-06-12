@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\PositionRequest;
+use App\Models\History;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Http\Request;
 
 /**
  * Class PositionCrudController
@@ -21,7 +23,7 @@ class PositionCrudController extends CrudController
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
-     * 
+     *
      * @return void
      */
     public function setup()
@@ -33,40 +35,68 @@ class PositionCrudController extends CrudController
 
     /**
      * Define what happens when the List operation is loaded.
-     * 
+     *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // set columns from db columns.
-
-        /**
-         * Columns can be defined using the fluent syntax:
-         * - CRUD::column('price')->type('number');
-         */
+        CRUD::column('id');
+        CRUD::column('title');
+        CRUD::button('view_histories')->stack('line')->view('crud::buttons.quick')->meta([
+            'access'  => true,
+            'label'   => 'View Histories',
+            'icon'    => 'la la-paw',
+            'wrapper' => [
+                'href' => function ($entry, $crud) {
+                    return url($crud->route . '/' . $entry->getKey() . '/histories');
+                },
+                'title' => 'View owner histories',
+            ],
+        ]);
     }
 
     /**
      * Define what happens when the Create operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
      * @return void
      */
     protected function setupCreateOperation()
     {
         CRUD::setValidation(PositionRequest::class);
-        CRUD::setFromDb(); // set fields from db columns.
+        CRUD::field('title');
+        CRUD::field('start_date')->type('date');
+        CRUD::field('end_date')->type('date');
 
-        /**
-         * Fields can be defined using the fluent syntax:
-         * - CRUD::field('price')->type('number');
-         */
+        CRUD::addSaveAction([
+            'name' => 'save_and_create_history',
+            'redirect' => function ($crud, $request, $itemId) {
+                return $crud->route;
+            },
+            'button_text' => 'Save and Create History',
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+
+        $unit = $this->crud->create($request->except(['start_date', 'end_date']));
+
+        $unit->histories()
+            ->save(new History(['start_date' => $request->start_date, 'end_date' => $request->end_date]));
+
+        return $this->crud->performSaveAction($unit->id);
     }
 
     /**
      * Define what happens when the Update operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */

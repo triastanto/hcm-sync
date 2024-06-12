@@ -12,6 +12,8 @@ class Position extends Model
     use CrudTrait;
     use HasFactory;
 
+    protected $guarded = [];
+
     public function histories() : MorphMany
     {
         return $this->morphMany(History::class, 'historiable');

@@ -41,6 +41,7 @@ class HistoryCrudController extends CrudController
     {
         CRUD::column('historiable_type');
         CRUD::column('historiable_id');
+        CRUD::addColumn(['name' => 'meta', 'label' => 'Meta', 'type' => 'json']);
         CRUD::column('start_date');
         CRUD::column('end_date');
     }

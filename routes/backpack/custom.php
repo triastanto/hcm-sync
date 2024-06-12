@@ -18,10 +18,13 @@ Route::group([
 ], function () { // custom admin routes
     Route::crud('user', 'UserCrudController');
     Route::crud('unit', 'UnitCrudController');
+    Route::crud('position', 'PositionCrudController');
     Route::crud('history', 'HistoryCrudController');
-    // nested crud panel for owner pets
+    // nested crud panel
     Route::group(['prefix' => 'unit/{unit}'], function () {
         Route::crud('histories', 'UnitHistoriesCrudController');
     });
-    Route::crud('position', 'PositionCrudController');
+    Route::group(['prefix' => 'position/{position}'], function () {
+        Route::crud('histories', 'PositionHistoriesCrudController');
+    });
 }); // this should be the absolute last line of this file

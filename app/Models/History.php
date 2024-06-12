@@ -14,6 +14,10 @@ class History extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'meta' => 'array',
+    ];
+
     public function historiable(): MorphTo
     {
         return $this->morphTo();

@@ -13,6 +13,7 @@ return new class () extends Migration {
         Schema::create('histories', function (Blueprint $table) {
             $table->id();
             $table->morphs('historiable');
+            $table->jsonb('meta');
             $table->date('start_date');
             $table->date('end_date');
             $table->timestamps();
