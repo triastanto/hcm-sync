@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Organization;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,6 +19,7 @@ class PositionFactory extends Factory
     {
         return [
             'title' => fake()->name(),
+            'organization_id' => Organization::factory()->create()->id,
         ];
     }
 }
