@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Organization;
 use Illuminate\Database\Seeder;
 
 class OrganizationSeeder extends Seeder
@@ -12,6 +12,7 @@ class OrganizationSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        Organization::factory()->withParent()->count(5)->create();
+        Organization::factory()->count(5)->create();
     }
 }

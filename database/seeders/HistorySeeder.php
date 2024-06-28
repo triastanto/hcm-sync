@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\History;
 use Illuminate\Database\Seeder;
 
 class HistorySeeder extends Seeder
@@ -12,6 +12,6 @@ class HistorySeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        History::factory()->count(10)->create();
     }
 }
