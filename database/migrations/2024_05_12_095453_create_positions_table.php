@@ -12,10 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('positions', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id');
             $table->string('title');
-            $table->foreignId('organization_id')->constrained();
+            $table->foreignUuid('organization_id')->constrained();
             $table->timestamps();
+
+            $table->primary('id');
         });
     }
 
