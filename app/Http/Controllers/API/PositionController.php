@@ -17,7 +17,7 @@ class PositionController extends Controller
     {
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
-            'organization_id' => 'required|exists:organizations,id',
+            'unit_id' => 'required|exists:units,id',
         ]);
 
         $position = Position::create($validatedData);
@@ -34,7 +34,7 @@ class PositionController extends Controller
     {
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
-            'organization_id' => 'required|exists:organizations,id',
+            'unit_id' => 'required|exists:units,id',
         ]);
 
         $position->update($validatedData);

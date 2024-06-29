@@ -14,10 +14,12 @@ return new class extends Migration
         Schema::create('positions', function (Blueprint $table) {
             $table->uuid('id');
             $table->string('title');
-            $table->foreignUuid('organization_id')->constrained();
+            $table->foreignUuid('unit_id')->constrained();
+            $table->uuid('parent_id')->nullable();
             $table->timestamps();
 
             $table->primary('id');
+            $table->foreign('parent_id')->references('id')->on('positions')->onDelete('cascade');
         });
     }
 

@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Organization;
+use App\Models\Unit;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,9 +17,11 @@ class PositionFactory extends Factory
      */
     public function definition(): array
     {
+        $positions = [ "Chief Executive Officer", "Vice President of Sales", "Vice President of Marketing", "Vice President of Finance", "Vice President of Operations", "Vice President of Human Resources", "Vice President of Technology", "Vice President of Business Development", "Vice President of Customer Service", "Vice President of Research and Development", "Director of Sales", "Director of Marketing", "Director of Finance", "Director of Operations", "Sales Manager", "Marketing Manager", "Finance Manager", "Operations Manager", "Human Resources Manager", "Technology Manager", "Business Development Manager", "Customer Service Manager", "Research and Development Manager", "Project Manager", "Product Manager", "Account Manager", "Client Relationship Manager", "IT Manager", "Compliance Manager", "Training Manager", "Development Manager", "Strategic Planning Manager", "Operations Coordinator", "Sales Coordinator", "Marketing Coordinator", "Finance Coordinator" ];
+
         return [
-            'title' => fake()->name(),
-            'organization_id' => Organization::factory()->create()->id,
+            'title' => fake()->randomElement($positions),
+            'unit_id' => Unit::factory()->create()->id,
         ];
     }
 }

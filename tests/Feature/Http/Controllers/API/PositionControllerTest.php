@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Organization;
+use App\Models\Unit;
 use App\Models\Position;
 use Illuminate\Foundation\Testing\DatabaseTruncation;
 
@@ -17,11 +17,11 @@ it('can list positions', function () {
 });
 
 it('can create a position', function () {
-    $organization = Organization::factory()->create();
+    $unit = Unit::factory()->create();
 
     $data = [
         'title' => 'Software Engineer',
-        'organization_id' => $organization->id,
+        'unit_id' => $unit->id,
     ];
 
     $response = $this->postJson('/api/positions', $data);
@@ -45,11 +45,11 @@ it('can show a position', function () {
 
 it('can update a position', function () {
     $position = Position::factory()->create();
-    $organization = Organization::factory()->create();
+    $unit = Unit::factory()->create();
 
     $newData = [
         'title' => 'Senior Software Engineer',
-        'organization_id' => $organization->id,
+        'unit_id' => $unit->id,
     ];
 
     $response = $this->putJson("/api/positions/{$position->id}", $newData);
