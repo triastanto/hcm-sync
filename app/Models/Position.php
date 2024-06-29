@@ -16,12 +16,12 @@ class Position extends Model
 
     protected $guarded = [];
 
-    public function parent() : BelongsTo
+    public function parent(): BelongsTo
     {
         return $this->belongsTo(Position::class, 'parent_id');
     }
 
-    public function children() : HasMany
+    public function children(): HasMany
     {
         return $this->hasMany(Position::class, 'parent_id');
     }

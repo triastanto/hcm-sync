@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Unit extends Model
@@ -17,27 +16,27 @@ class Unit extends Model
 
     protected $guarded = [];
 
-    public function histories() : MorphMany
+    public function histories(): MorphMany
     {
         return $this->morphMany(History::class, 'historiable');
     }
 
-    public function organization() : BelongsTo
+    public function organization(): BelongsTo
     {
         return $this->belongsTo(Organization::class);
     }
 
-    public function position() : HasOne
+    public function positions(): HasMany
     {
-        return $this->hasOne(Position::class);
+        return $this->hasMany(Position::class);
     }
 
-    public function parent() : BelongsTo
+    public function parent(): BelongsTo
     {
         return $this->belongsTo(Unit::class, 'parent_id');
     }
 
-    public function children() : HasMany
+    public function children(): HasMany
     {
         return $this->hasMany(Unit::class, 'parent_id');
     }

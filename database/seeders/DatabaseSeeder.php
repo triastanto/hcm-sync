@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Employee;
+use App\Models\Organization;
+use App\Models\Position;
+use App\Models\Unit;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,12 +15,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
-            UserSeeder::class,
-            UnitSeeder::class,
-            PositionSeeder::class,
-            OrganizationSeeder::class,
-            EmployeeSeeder::class,
-        ]);
+        Organization::factory()
+            ->has(Unit::factory()
+                ->has(Position::factory()
+                    ->has(Employee::factory()->count(fake()->numberBetween(1, 5)))
+                    ->count(fake()->numberBetween(1, 5)))
+                ->count(fake()->numberBetween(1, 5)))
+            ->create();
     }
 }

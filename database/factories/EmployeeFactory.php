@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Position;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -22,7 +21,6 @@ class EmployeeFactory extends Factory
             'email' => $this->faker->unique()->safeEmail,
             'username' => $this->faker->unique()->userName,
             'personnel_no' => 'EMP' . $this->faker->unique()->numberBetween(1000, 9999),
-            'position_id' => Position::factory()->create()->id,
         ];
     }
 }
