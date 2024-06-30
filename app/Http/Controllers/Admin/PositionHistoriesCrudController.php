@@ -28,7 +28,7 @@ class PositionHistoriesCrudController extends HistoryCrudController
         CRUD::setRoute(config('backpack.base.route_prefix') . '/position/' . $this->position . '/histories');
 
         // show only that position's histories
-       CRUD::addBaseClause(function (Builder $query) {
+        CRUD::addBaseClause(function (Builder $query) {
             $query->whereHasMorph(
                 'historiable',
                 [Position::class],

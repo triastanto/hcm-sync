@@ -14,22 +14,22 @@ class Organization extends Model
 
     protected $guarded = [];
 
-    public function parent() : BelongsTo
+    public function parent(): BelongsTo
     {
         return $this->belongsTo(Organization::class, 'parent_id');
     }
 
-    public function children() : HasMany
+    public function children(): HasMany
     {
         return $this->hasMany(Organization::class, 'parent_id');
     }
 
-    public function units() : HasMany
+    public function units(): HasMany
     {
         return $this->hasMany(Unit::class);
     }
 
-    public function positions() : HasMany
+    public function positions(): HasMany
     {
         return $this->hasMany(Position::class);
     }

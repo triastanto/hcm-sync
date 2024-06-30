@@ -28,7 +28,7 @@ class UnitHistoriesCrudController extends HistoryCrudController
         CRUD::setRoute(config('backpack.base.route_prefix') . '/unit/' . $this->unit . '/histories');
 
         // show only that unit's histories
-       CRUD::addBaseClause(function (Builder $query) {
+        CRUD::addBaseClause(function (Builder $query) {
             $query->whereHasMorph(
                 'historiable',
                 [Unit::class],
