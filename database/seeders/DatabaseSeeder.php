@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
                     ->has(Employee::factory()->count(fake()->numberBetween(1, 5)))
                     ->count(fake()->numberBetween(1, 5)))
                 ->count(fake()->numberBetween(1, 5)))
+            ->count(5)
             ->create();
     }
 }
