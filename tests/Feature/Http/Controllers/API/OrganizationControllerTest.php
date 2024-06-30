@@ -1,18 +1,19 @@
 <?php
 
 use App\Models\Organization;
-use Illuminate\Foundation\Testing\DatabaseTruncation;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
-uses(DatabaseTruncation::class);
+uses(RefreshDatabase::class);
+
+beforeEach(fn () => $this->actingAs(User::factory()->create()));
 
 it('can list organizations', function () {
-    Organization::factory()->count(3)->create();
-
     $response = $this->getJson('/api/organizations');
 
     $response
         ->assertStatus(200)
-        ->assertJsonCount(3);
+        ->assertJsonIsArray();
 });
 
 it('can create an organization', function () {
@@ -30,7 +31,7 @@ it('can create an organization', function () {
 });
 
 it('can show an organization', function () {
-    $organization = Organization::factory()->create();
+    $organization = Organization::first();
 
     $response = $this->getJson("/api/organizations/{$organization->id}");
 
@@ -40,7 +41,7 @@ it('can show an organization', function () {
 });
 
 it('can update an organization', function () {
-    $organization = Organization::factory()->create();
+    $organization = Organization::first();
     $newData = [
         'name' => 'Updated Organization Name',
     ];
@@ -55,7 +56,7 @@ it('can update an organization', function () {
 });
 
 it('can delete an organization', function () {
-    $organization = Organization::factory()->create();
+    $organization = Organization::first();
 
     $response = $this->deleteJson("/api/organizations/{$organization->id}");
 

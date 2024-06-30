@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('units', function (Blueprint $table) {
             $table->uuid('id');
             $table->string('name');
-            $table->foreignUuid('organization_id')->constrained();
+            $table->foreignUuid('organization_id')->constrained()->onDelete('cascade');
             $table->timestamps();
 
             $table->primary('id');

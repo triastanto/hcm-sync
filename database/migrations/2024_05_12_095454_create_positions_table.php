@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('positions', function (Blueprint $table) {
             $table->uuid('id');
             $table->string('title');
-            $table->foreignUuid('unit_id')->constrained();
+            $table->foreignUuid('unit_id')->constrained()->onDelete('cascade');
             $table->uuid('parent_id')->nullable();
             $table->timestamps();
 

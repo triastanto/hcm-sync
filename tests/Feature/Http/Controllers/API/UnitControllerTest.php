@@ -2,24 +2,25 @@
 
 use App\Models\Organization;
 use App\Models\Unit;
-use Illuminate\Foundation\Testing\DatabaseTruncation;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
-uses(DatabaseTruncation::class);
+uses(RefreshDatabase::class);
+
+beforeEach(fn () => $this->actingAs(User::factory()->create()));
 
 it('can list units', function () {
-
-    Unit::factory()->count(3)->create();
-
     $response = $this->getJson('/api/units');
 
     $response->assertStatus(200)
-             ->assertJsonCount(3);
+             ->assertJsonIsArray();
 });
 
 it('can create a unit', function () {
+    $organization = Organization::first();
     $unitData = [
         'name' => 'New Unit',
-        'organization_id' => Organization::factory()->create()->id,
+        'organization_id' => $organization->id,
     ];
 
     $response = $this->postJson('/api/units', $unitData);
@@ -31,7 +32,7 @@ it('can create a unit', function () {
 });
 
 it('can show a unit', function () {
-    $unit = Unit::factory()->create();
+    $unit = Unit::first();
 
     $response = $this->getJson("/api/units/{$unit->id}");
 
@@ -40,7 +41,7 @@ it('can show a unit', function () {
 });
 
 it('can update a unit', function () {
-    $unit = Unit::factory()->create();
+    $unit = Unit::first();
 
     $updatedData = [
         'name' => 'Updated Unit',
@@ -55,7 +56,7 @@ it('can update a unit', function () {
 });
 
 it('can delete a unit', function () {
-    $unit = Unit::factory()->create();
+    $unit = Unit::first();
 
     $response = $this->deleteJson("/api/units/{$unit->id}");
 

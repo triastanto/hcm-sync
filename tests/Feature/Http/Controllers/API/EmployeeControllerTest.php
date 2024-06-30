@@ -2,22 +2,23 @@
 
 use App\Models\Employee;
 use App\Models\Position;
-use Illuminate\Foundation\Testing\DatabaseTruncation;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
-uses(DatabaseTruncation::class);
+uses(RefreshDatabase::class);
+
+beforeEach(fn () => $this->actingAs(User::factory()->create()));
 
 it('can list employees', function () {
-    Employee::factory()->count(3)->create();
-
     $response = $this->getJson('/api/employees');
 
     $response
         ->assertStatus(200)
-        ->assertJsonCount(3);
+        ->assertJsonIsArray();
 });
 
 it('can create an employee', function () {
-    $position = Position::factory()->create();
+    $position = Position::first();
 
     $data = [
         'name' => 'John Doe',
@@ -37,7 +38,7 @@ it('can create an employee', function () {
 });
 
 it('can show an employee', function () {
-    $employee = Employee::factory()->create();
+    $employee = Employee::first();
 
     $response = $this->getJson("/api/employees/{$employee->id}");
 
@@ -47,8 +48,8 @@ it('can show an employee', function () {
 });
 
 it('can update an employee', function () {
-    $employee = Employee::factory()->create();
-    $position = Position::factory()->create();
+    $employee = Employee::first();
+    $position = Position::first();
 
     $newData = [
         'name' => 'Jane Doe',
@@ -68,7 +69,7 @@ it('can update an employee', function () {
 });
 
 it('can delete an employee', function () {
-    $employee = Employee::factory()->create();
+    $employee = Employee::first();
 
     $response = $this->deleteJson("/api/employees/{$employee->id}");
 

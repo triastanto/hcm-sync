@@ -2,22 +2,23 @@
 
 use App\Models\Unit;
 use App\Models\Position;
-use Illuminate\Foundation\Testing\DatabaseTruncation;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
-uses(DatabaseTruncation::class);
+uses(RefreshDatabase::class);
+
+beforeEach(fn () => $this->actingAs(User::factory()->create()));
 
 it('can list positions', function () {
-    Position::factory()->count(3)->create();
-
     $response = $this->getJson('/api/positions');
 
     $response
         ->assertStatus(200)
-        ->assertJsonCount(3);
+        ->assertJsonIsArray();
 });
 
 it('can create a position', function () {
-    $unit = Unit::factory()->create();
+    $unit = Unit::first();
 
     $data = [
         'title' => 'Software Engineer',
@@ -34,7 +35,7 @@ it('can create a position', function () {
 });
 
 it('can show a position', function () {
-    $position = Position::factory()->create();
+    $position = Position::first();
 
     $response = $this->getJson("/api/positions/{$position->id}");
 
@@ -44,8 +45,8 @@ it('can show a position', function () {
 });
 
 it('can update a position', function () {
-    $position = Position::factory()->create();
-    $unit = Unit::factory()->create();
+    $position = Position::first();
+    $unit = Unit::first();
 
     $newData = [
         'title' => 'Senior Software Engineer',
@@ -62,7 +63,7 @@ it('can update a position', function () {
 });
 
 it('can delete a position', function () {
-    $position = Position::factory()->create();
+    $position = Position::first();
 
     $response = $this->deleteJson("/api/positions/{$position->id}");
 

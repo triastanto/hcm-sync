@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('username')->unique();
             $table->string('personnel_no');
-            $table->foreignUuid('position_id')->constrained();
+            $table->foreignUuid('position_id')->constrained()->onDelete('cascade');
             $table->timestamps();
 
             $table->primary('id');
