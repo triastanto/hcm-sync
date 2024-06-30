@@ -1,19 +1,25 @@
 <?php
 
+use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\OrganizationController;
 use App\Http\Controllers\API\UnitController;
 use App\Http\Controllers\API\EmployeeController;
 use App\Http\Controllers\API\PositionController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::group(['prefix' => 'auth'], function () {
+    Route::post('login', [AuthController::class, 'login']);
+    Route::post('register', [AuthController::class, 'register']);
 
-Route::apiResource('units', UnitController::class);
-Route::apiResource('organizations', OrganizationController::class);
-Route::get('organizations/{organization}/children', [OrganizationController::class, 'children']);
-Route::get('organizations/{organization}/parent', [OrganizationController::class, 'parent']);
-Route::apiResource('positions', PositionController::class);
-Route::apiResource('employees', EmployeeController::class);
+    Route::group(['middleware' => 'auth:sanctum'], function () {
+        Route::post('logout', [AuthController::class, 'logout']);
+        Route::get('user', [AuthController::class, 'user']);
+    });
+});
+
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::apiResource('organizations', OrganizationController::class);
+    Route::apiResource('units', UnitController::class);
+    Route::apiResource('positions', PositionController::class);
+    Route::apiResource('employees', EmployeeController::class);
+});
