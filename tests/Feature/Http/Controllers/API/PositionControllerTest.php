@@ -10,11 +10,12 @@ uses(RefreshDatabase::class);
 beforeEach(fn () => $this->actingAs(User::factory()->create()));
 
 it('can list positions', function () {
+    $data = Position::paginate()->toArray();
     $response = $this->getJson('/api/positions');
 
     $response
-        ->assertStatus(200)
-        ->assertJsonIsArray();
+        ->assertOk()
+        ->assertJsonFragment(['data' => $data['data']]);
 });
 
 it('can create a position', function () {
@@ -40,7 +41,7 @@ it('can show a position', function () {
     $response = $this->getJson("/api/positions/{$position->id}");
 
     $response
-        ->assertStatus(200)
+        ->assertOk()
         ->assertJson($position->toArray());
 });
 
@@ -56,7 +57,7 @@ it('can update a position', function () {
     $response = $this->putJson("/api/positions/{$position->id}", $newData);
 
     $response
-        ->assertStatus(200)
+        ->assertOk()
         ->assertJson($newData);
 
     expect(Position::find($position->id)->title)->toBe('Senior Software Engineer');

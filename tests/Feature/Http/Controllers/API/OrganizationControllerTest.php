@@ -9,11 +9,12 @@ uses(RefreshDatabase::class);
 beforeEach(fn () => $this->actingAs(User::factory()->create()));
 
 it('can list organizations', function () {
+    $data = Organization::paginate()->toArray();
     $response = $this->getJson('/api/organizations');
 
     $response
-        ->assertStatus(200)
-        ->assertJsonIsArray();
+        ->assertOk()
+        ->assertJsonFragment(['data' => $data['data']]);
 });
 
 it('can create an organization', function () {
@@ -36,7 +37,7 @@ it('can show an organization', function () {
     $response = $this->getJson("/api/organizations/{$organization->id}");
 
     $response
-        ->assertStatus(200)
+        ->assertOk()
         ->assertJson($organization->toArray());
 });
 
@@ -49,7 +50,7 @@ it('can update an organization', function () {
     $response = $this->putJson("/api/organizations/{$organization->id}", $newData);
 
     $response
-        ->assertStatus(200)
+        ->assertOk()
         ->assertJson($newData);
 
     expect(Organization::find($organization->id)->name)->toBe('Updated Organization Name');

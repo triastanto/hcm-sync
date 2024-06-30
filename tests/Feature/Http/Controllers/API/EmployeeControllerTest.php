@@ -4,17 +4,19 @@ use App\Models\Employee;
 use App\Models\Position;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Testing\Fluent\AssertableJson;
 
 uses(RefreshDatabase::class);
 
 beforeEach(fn () => $this->actingAs(User::factory()->create()));
 
 it('can list employees', function () {
+    $data = Employee::paginate()->toArray();
     $response = $this->getJson('/api/employees');
 
     $response
-        ->assertStatus(200)
-        ->assertJsonIsArray();
+        ->assertOk()
+        ->assertJsonFragment(['data' => $data['data']]);
 });
 
 it('can create an employee', function () {
@@ -43,7 +45,7 @@ it('can show an employee', function () {
     $response = $this->getJson("/api/employees/{$employee->id}");
 
     $response
-        ->assertStatus(200)
+        ->assertOk()
         ->assertJson($employee->toArray());
 });
 
@@ -62,7 +64,7 @@ it('can update an employee', function () {
     $response = $this->putJson("/api/employees/{$employee->id}", $newData);
 
     $response
-        ->assertStatus(200)
+        ->assertOk()
         ->assertJson($newData);
 
     expect(Employee::find($employee->id)->name)->toBe('Jane Doe');

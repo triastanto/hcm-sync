@@ -10,7 +10,7 @@ class EmployeeController extends Controller
 {
     public function index()
     {
-        return response()->json(Employee::all(), 200);
+        return response()->json(Employee::paginate(), 200);
     }
 
     public function store(Request $request)

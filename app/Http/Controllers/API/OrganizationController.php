@@ -10,7 +10,7 @@ class OrganizationController extends Controller
 {
     public function index()
     {
-        return response()->json(Organization::all(), 200);
+        return response()->json(Organization::paginate(), 200);
     }
 
     public function store(Request $request)

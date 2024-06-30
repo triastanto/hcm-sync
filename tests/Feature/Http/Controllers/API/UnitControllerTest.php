@@ -10,10 +10,12 @@ uses(RefreshDatabase::class);
 beforeEach(fn () => $this->actingAs(User::factory()->create()));
 
 it('can list units', function () {
+    $data = Unit::paginate()->toArray();
     $response = $this->getJson('/api/units');
 
-    $response->assertStatus(200)
-             ->assertJsonIsArray();
+    $response
+        ->assertOk()
+        ->assertJsonFragment(['data' => $data['data']]);
 });
 
 it('can create a unit', function () {
@@ -26,7 +28,7 @@ it('can create a unit', function () {
     $response = $this->postJson('/api/units', $unitData);
 
     $response->assertStatus(201)
-             ->assertJsonFragment($unitData);
+        ->assertJsonFragment($unitData);
 
     $this->assertDatabaseHas('units', $unitData);
 });
@@ -36,8 +38,8 @@ it('can show a unit', function () {
 
     $response = $this->getJson("/api/units/{$unit->id}");
 
-    $response->assertStatus(200)
-             ->assertJsonFragment(['name' => $unit->name]);
+    $response->assertOk()
+        ->assertJsonFragment(['name' => $unit->name]);
 });
 
 it('can update a unit', function () {
@@ -49,8 +51,8 @@ it('can update a unit', function () {
 
     $response = $this->putJson("/api/units/{$unit->id}", $updatedData);
 
-    $response->assertStatus(200)
-             ->assertJsonFragment($updatedData);
+    $response->assertOk()
+        ->assertJsonFragment($updatedData);
 
     $this->assertDatabaseHas('units', $updatedData);
 });
