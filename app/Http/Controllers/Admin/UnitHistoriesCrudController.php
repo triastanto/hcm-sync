@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 
 class UnitHistoriesCrudController extends HistoryCrudController
 {
-    private int $unit;
+    private string $unit;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.

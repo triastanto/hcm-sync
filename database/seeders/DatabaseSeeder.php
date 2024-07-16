@@ -18,10 +18,10 @@ class DatabaseSeeder extends Seeder
         Organization::factory()
             ->has(Unit::factory()
                 ->has(Position::factory()
-                    ->has(Employee::factory()->count(fake()->numberBetween(1, 5)))
-                    ->count(fake()->numberBetween(1, 5)))
-                ->count(fake()->numberBetween(1, 5)))
-            ->count(5)
+                    ->has(Employee::factory()->count(fake()->numberBetween(1, 1)))
+                    ->count(fake()->numberBetween(1, 1)))
+                ->count(fake()->numberBetween(1, 1)))
+            ->count(100)
             ->create();
     }
 }

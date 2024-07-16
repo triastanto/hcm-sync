@@ -27,4 +27,6 @@ Route::group([
     Route::group(['prefix' => 'position/{position}', 'name' => 'position.'], function () {
         Route::crud('histories', 'PositionHistoriesCrudController');
     });
+    Route::crud('employee', 'EmployeeCrudController');
+    Route::crud('organization', 'OrganizationCrudController');
 }); // this should be the absolute last line of this file

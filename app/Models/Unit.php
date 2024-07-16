@@ -12,7 +12,9 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Unit extends Model
 {
-    use CrudTrait, HasFactory, HasUuids;
+    use CrudTrait;
+    use HasFactory;
+    use HasUuids;
 
     protected $guarded = [];
 
