@@ -45,4 +45,19 @@ class UnitController extends Controller
         $unit->delete();
         return response()->json(null, 204);
     }
+
+    public function parent(Unit $unit)
+    {
+        return response()->json($unit->parent, 200);
+    }
+
+    public function children(Unit $unit)
+    {
+        return response()->json($unit->children()->paginate(), 200);
+    }
+
+    public function positions(Unit $unit)
+    {
+        return response()->json($unit->positions()->paginate(), 200);
+    }
 }

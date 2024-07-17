@@ -18,6 +18,8 @@ class PositionController extends Controller
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'unit_id' => 'required|exists:units,id',
+            'subgroup' => 'required',
+            'is_structural' => 'required',
         ]);
 
         $position = Position::create($validatedData);
@@ -47,5 +49,10 @@ class PositionController extends Controller
         $position->delete();
 
         return response()->json(null, 204);
+    }
+
+    public function employees(Position $position)
+    {
+        return response()->json($position->employees()->paginate(), 200);
     }
 }

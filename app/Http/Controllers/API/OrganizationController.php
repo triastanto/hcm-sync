@@ -48,4 +48,19 @@ class OrganizationController extends Controller
 
         return response()->json(null, 204);
     }
+
+    public function parent(Organization $organization)
+    {
+        return response()->json($organization->parent, 200);
+    }
+
+    public function children(Organization $organization)
+    {
+        return response()->json($organization->children()->paginate(), 200);
+    }
+
+    public function units(Organization $organization)
+    {
+        return response()->json($organization->units()->paginate(), 200);
+    }
 }

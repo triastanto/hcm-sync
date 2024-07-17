@@ -13,8 +13,8 @@ return new class () extends Migration {
         Schema::create('positions', function (Blueprint $table) {
             $table->uuid('id');
             $table->string('title');
-            $table->string('subgroup', 10)->nullable();
-            $table->boolean('isStructural')->nullable();
+            $table->string('subgroup', 10);
+            $table->boolean('is_structural');
             $table->foreignUuid('unit_id')->constrained()->onDelete('cascade');
             $table->timestamps();
 

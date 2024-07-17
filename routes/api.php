@@ -19,7 +19,22 @@ Route::group(['prefix' => 'auth'], function () {
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::apiResource('organizations', OrganizationController::class);
+    Route::prefix('organizations/{organization}')->name('organizations.')->group(function () {
+        Route::get('units', [OrganizationController::class, 'units'])->name('units.index');
+        Route::get('parent', [OrganizationController::class, 'parent'])->name('parent');
+        Route::get('children', [OrganizationController::class, 'children'])->name('children');
+    });
+
     Route::apiResource('units', UnitController::class);
+    Route::prefix('units/{unit}')->name('units.')->group(function () {
+        Route::get('positions', [UnitController::class, 'positions'])->name('positions.index');
+        Route::get('parent', [UnitController::class, 'parent'])->name('parent');
+        Route::get('children', [UnitController::class, 'children'])->name('children');
+    });
+
     Route::apiResource('positions', PositionController::class);
+    Route::get('positions/{position}/employees', [PositionController::class, 'employees'])->name('positions.employees.index');
+
     Route::apiResource('employees', EmployeeController::class);
+    Route::get('employees/{employee}/position', [EmployeeController::class, 'position'])->name('employees.position.show');
 });

@@ -24,6 +24,8 @@ it('can create a position', function () {
     $data = [
         'title' => 'Software Engineer',
         'unit_id' => $unit->id,
+        'subgroup' => 'AS',
+        'is_structural' => true,
     ];
 
     $response = $this->postJson('/api/positions', $data);

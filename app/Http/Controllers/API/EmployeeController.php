@@ -54,4 +54,9 @@ class EmployeeController extends Controller
 
         return response()->json(null, 204);
     }
+
+    public function position(Employee $employee)
+    {
+        return response()->json($employee->position, 200);
+    }
 }
