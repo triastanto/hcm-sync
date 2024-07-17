@@ -20,7 +20,7 @@ class OrganizationFactory extends Factory
         $organizations = ["Global Solutions Inc.", "Apex Innovations", "Evergreen Enterprises", "Nexus Technologies", "Quantum Dynamics", "Horizon Ventures", "Stellar Networks", "BlueSky Logistics", "Infinity Systems", "Zenith Industries", "SolarWave Corp.", "Prime Strategies",];
 
         return [
-            'name' => fake()->randomElement($organizations),
+            'name' => fake()->unique()->randomElement($organizations),
         ];
     }
 
