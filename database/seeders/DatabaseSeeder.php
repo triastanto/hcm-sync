@@ -15,13 +15,33 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Organization::factory()
+        $organizations = Organization::factory()
             ->has(Unit::factory()
                 ->has(Position::factory()
-                    ->has(Employee::factory()->count(fake()->numberBetween(1, 1)))
-                    ->count(fake()->numberBetween(1, 1)))
-                ->count(fake()->numberBetween(1, 1)))
-            ->count(100)
+                    ->has(Employee::factory()->count(fake()->numberBetween(1, 3)))
+                    ->count(fake()->numberBetween(1, 3)))
+                ->count(fake()->numberBetween(1, 3)))
+            ->count(12)
             ->create();
+
+        // Set parent-child relationship for organizations
+        $organizations->each(function ($organization) use ($organizations) {
+            $potentialParents = $organizations->where('id', '!=', $organization->id);
+            if ($potentialParents->isNotEmpty()) {
+                $organization->update(['parent_id' => $potentialParents->random()->id]);
+            }
+        });
+
+        // Set parent-child relationship for units within each organization
+        foreach ($organizations as $organization) {
+            $units = $organization->units;
+
+            $units->each(function ($unit) use ($units) {
+                $potentialParents = $units->where('id', '!=', $unit->id);
+                if ($potentialParents->isNotEmpty()) {
+                    $unit->update(['parent_id' => $potentialParents->random()->id]);
+                }
+            });
+        }
     }
 }
