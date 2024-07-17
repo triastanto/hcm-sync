@@ -9,14 +9,21 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Venturecraft\Revisionable\RevisionableTrait;
 
 class Unit extends Model
 {
     use CrudTrait;
     use HasFactory;
     use HasUuids;
+    use RevisionableTrait;
 
     protected $guarded = [];
+
+    public function identifiableName(): string
+    {
+        return $this->name;
+    }
 
     public function histories(): MorphMany
     {

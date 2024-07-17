@@ -15,6 +15,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call(UserSeeder::class);
+
         $organizations = Organization::factory()
             ->has(Unit::factory()
                 ->has(Position::factory()
@@ -28,6 +30,7 @@ class DatabaseSeeder extends Seeder
         $organizations->each(function ($organization) use ($organizations) {
             $potentialParents = $organizations->where('id', '!=', $organization->id);
             if ($potentialParents->isNotEmpty()) {
+                $organization->disableRevisionField('parent_id');
                 $organization->update(['parent_id' => $potentialParents->random()->id]);
             }
         });
@@ -35,10 +38,10 @@ class DatabaseSeeder extends Seeder
         // Set parent-child relationship for units within each organization
         foreach ($organizations as $organization) {
             $units = $organization->units;
-
             $units->each(function ($unit) use ($units) {
                 $potentialParents = $units->where('id', '!=', $unit->id);
                 if ($potentialParents->isNotEmpty()) {
+                    $unit->disableRevisionField('parent_id');
                     $unit->update(['parent_id' => $potentialParents->random()->id]);
                 }
             });
