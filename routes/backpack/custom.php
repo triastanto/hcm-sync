@@ -19,14 +19,6 @@ Route::group([
     Route::crud('user', 'UserCrudController');
     Route::crud('unit', 'UnitCrudController');
     Route::crud('position', 'PositionCrudController');
-    Route::crud('history', 'HistoryCrudController');
-    // nested crud panel
-    Route::group(['prefix' => 'unit/{unit}', 'name' => 'unit.'], function () {
-        Route::crud('histories', 'UnitHistoriesCrudController');
-    });
-    Route::group(['prefix' => 'position/{position}', 'name' => 'position.'], function () {
-        Route::crud('histories', 'PositionHistoriesCrudController');
-    });
     Route::crud('employee', 'EmployeeCrudController');
     Route::crud('organization', 'OrganizationCrudController');
 }); // this should be the absolute last line of this file

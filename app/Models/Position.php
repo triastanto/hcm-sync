@@ -20,11 +20,6 @@ class Position extends Model
 
     protected $guarded = [];
 
-    public function histories(): MorphMany
-    {
-        return $this->morphMany(History::class, 'historiable');
-    }
-
     public function employees(): HasMany
     {
         return $this->hasMany(Employee::class);

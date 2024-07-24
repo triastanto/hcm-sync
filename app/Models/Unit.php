@@ -25,11 +25,6 @@ class Unit extends Model
         return $this->name;
     }
 
-    public function histories(): MorphMany
-    {
-        return $this->morphMany(History::class, 'historiable');
-    }
-
     public function organization(): BelongsTo
     {
         return $this->belongsTo(Organization::class);
