@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\PositionRequest;
-use App\Models\History;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
-use Illuminate\Http\Request;
 
 /**
  * Class PositionCrudController
@@ -22,86 +20,81 @@ class PositionCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     use \Backpack\ReviseOperation\ReviseOperation;
 
-    /**
-     * Configure the CrudPanel object. Apply settings to all operations.
-     *
-     * @return void
-     */
+    private string $unit_id;
+
     public function setup()
     {
         CRUD::setModel(\App\Models\Position::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/position');
         CRUD::setEntityNameStrings('position', 'positions');
+
+        if (request()->filled('unit_id')) {
+            $this->unit_id = request()->query('unit_id');
+            CRUD::addClause('where', 'unit_id', '=', $this->unit_id);
+        }
     }
 
-    /**
-     * Define what happens when the List operation is loaded.
-     *
-     * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
-     * @return void
-     */
-    protected function setupListOperation()
+    protected function setupListOperation(): void
     {
-        CRUD::column('id');
-        CRUD::column('title');
-        CRUD::button('view_histories')->stack('line')->view('crud::buttons.quick')->meta([
-            'access'  => true,
-            'label'   => 'View Histories',
-            'icon'    => 'la la-paw',
+        CRUD::addColumn([
+            'name' => 'title',
+            'label' => 'Title',
+            'type' => 'text',
+            'limit' => 80,
+        ]);
+        CRUD::addColumn([
+            'name' => 'unit',
+            'label' => 'Unit',
+            'attribute' => 'name',
+            'limit' => 80,
+        ]);
+    }
+
+    protected function setupShowOperation(): void
+    {
+        CRUD::addColumn([
+            'name' => 'id',
+            'label' => 'ID',
+            'type' => 'text',
+            'limit' => 36
+        ]);
+        $this->setupListOperation();
+        CRUD::addColumn([
+            'name' => 'organization',
+            'label' => 'Organization',
+            'type' => 'select',
+            'entity' => 'unit.organization',
+            'attribute' => 'name',
+        ]);
+        CRUD::addColumn([
+            'label' => 'Employees',
+            'type' => 'relationship_count',
+            'name' => 'employees',
+            'suffix' => ' employees',
             'wrapper' => [
-                'href' => function ($entry, $crud) {
-                    return url($crud->route . '/' . $entry->getKey() . '/histories');
+                'href' => function ($crud, $column, $entry, $related_key) {
+                    return backpack_url('employee?position_id=' . $entry->getKey());
                 },
-                'title' => 'View owner histories',
             ],
         ]);
     }
 
-    /**
-     * Define what happens when the Create operation is loaded.
-     *
-     * @see https://backpackforlaravel.com/docs/crud-operation-create
-     * @return void
-     */
-    protected function setupCreateOperation()
+    protected function setupCreateOperation(): void
     {
         CRUD::setValidation(PositionRequest::class);
         CRUD::field('title');
-        CRUD::field('start_date')->type('date');
-        CRUD::field('end_date')->type('date');
-
-        CRUD::addSaveAction([
-            'name' => 'save_and_create_history',
-            'redirect' => function ($crud, $request, $itemId) {
-                return $crud->route;
-            },
-            'button_text' => 'Save and Create History',
-        ]);
+        CRUD::field([
+                'label' => 'Unit',
+                'type' => 'select',
+                'name' => 'unit_id',
+                'entity' => 'unit',
+                'attribute' => 'name',
+                'model' => 'app\Models\Unit',
+            ],
+        );
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-        ]);
-
-        $unit = $this->crud->create($request->except(['start_date', 'end_date']));
-
-        $unit->histories()
-            ->save(new History(['start_date' => $request->start_date, 'end_date' => $request->end_date]));
-
-        return $this->crud->performSaveAction($unit->id);
-    }
-
-    /**
-     * Define what happens when the Update operation is loaded.
-     *
-     * @see https://backpackforlaravel.com/docs/crud-operation-update
-     * @return void
-     */
-    protected function setupUpdateOperation()
+    protected function setupUpdateOperation(): void
     {
         $this->setupCreateOperation();
     }

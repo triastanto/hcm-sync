@@ -38,9 +38,4 @@ class Organization extends Model
     {
         return $this->hasMany(Unit::class);
     }
-
-    public function positions(): HasMany
-    {
-        return $this->hasMany(Position::class);
-    }
 }

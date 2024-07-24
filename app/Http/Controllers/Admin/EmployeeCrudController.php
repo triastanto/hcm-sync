@@ -20,57 +20,63 @@ class EmployeeCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     use \Backpack\ReviseOperation\ReviseOperation;
 
-    /**
-     * Configure the CrudPanel object. Apply settings to all operations.
-     *
-     * @return void
-     */
+    private string $position_id;
+
     public function setup()
     {
         CRUD::setModel(\App\Models\Employee::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/employee');
         CRUD::setEntityNameStrings('employee', 'employees');
+
+        if (request()->filled('position_id')) {
+            $this->position_id = request()->query('position_id');
+            CRUD::addClause('where', 'position_id', '=', $this->position_id);
+        }
     }
 
-    /**
-     * Define what happens when the List operation is loaded.
-     *
-     * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
-     * @return void
-     */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // set columns from db columns.
-
-        /**
-         * Columns can be defined using the fluent syntax:
-         * - CRUD::column('price')->type('number');
-         */
+        CRUD::addColumn('name');
+        CRUD::addColumn('email');
+        CRUD::addColumn('username');
+        CRUD::addColumn('personnel_no');
+        CRUD::addColumn('position');
     }
 
-    /**
-     * Define what happens when the Create operation is loaded.
-     *
-     * @see https://backpackforlaravel.com/docs/crud-operation-create
-     * @return void
-     */
+    protected function setupShowOperation()
+    {
+        CRUD::addColumn([
+            'name' => 'id',
+            'label' => 'ID',
+            'type' => 'text',
+            'limit' => 36
+        ]);
+        $this->setupListOperation();
+        CRUD::addColumn([
+            'name' => 'unit',
+            'label' => 'Unit',
+            'entity' => 'position.unit',
+            'attribute' => 'name',
+        ]);
+        CRUD::addColumn([
+            'name' => 'organization',
+            'label' => 'Organization',
+            'type' => 'closure',
+            'function' => function($entry) {
+                return $entry->position->unit->organization->name;
+            },
+        ]);
+    }
+
     protected function setupCreateOperation()
     {
         CRUD::setValidation(EmployeeRequest::class);
-        CRUD::setFromDb(); // set fields from db columns.
-
-        /**
-         * Fields can be defined using the fluent syntax:
-         * - CRUD::field('price')->type('number');
-         */
+        CRUD::field('email');
+        CRUD::field('username');
+        CRUD::field('personnel_no');
+        CRUD::field('position');
     }
 
-    /**
-     * Define what happens when the Update operation is loaded.
-     *
-     * @see https://backpackforlaravel.com/docs/crud-operation-update
-     * @return void
-     */
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
