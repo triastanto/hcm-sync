@@ -4,6 +4,7 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\OrganizationController;
 use App\Http\Controllers\API\UnitController;
 use App\Http\Controllers\API\EmployeeController;
+use App\Http\Controllers\API\EmployeeHierarchyController;
 use App\Http\Controllers\API\PositionController;
 use Illuminate\Support\Facades\Route;
 
@@ -37,4 +38,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::apiResource('employees', EmployeeController::class);
     Route::get('employees/{employee}/position', [EmployeeController::class, 'position'])->name('employees.position.show');
+    Route::get('employees/{employee}/superior', [EmployeeController::class, 'superior'])->name('employees.superior');
+    Route::get('employees/{employee}/subordinates', [EmployeeController::class, 'subordinates'])->name('employees.subordinates');
 });

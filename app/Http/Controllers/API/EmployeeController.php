@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Employee;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
@@ -58,5 +59,15 @@ class EmployeeController extends Controller
     public function position(Employee $employee)
     {
         return response()->json($employee->position, 200);
+    }
+
+    public function superior(Employee $employee): JsonResponse
+    {
+        return response()->json($employee->getSuperior(), 200);
+    }
+
+    public function subordinates(Employee $employee): JsonResponse
+    {
+        return response()->json($employee->getSubordinates(), 200);
     }
 }

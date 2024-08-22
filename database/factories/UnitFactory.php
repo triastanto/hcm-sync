@@ -16,10 +16,69 @@ class UnitFactory extends Factory
      */
     public function definition(): array
     {
-        $units = ["Finance Department", "Human Resources Department", "Marketing Department", "Sales Department", "Operations Department", "Technology Department", "Customer Service Department", "Research and Development Department", "Legal Department", "Compliance Department", "Strategy Department", "Product Development Department", "Business Development Department", "Corporate Communications Department", "Supply Chain Department", "Quality Assurance Department", "Facilities Management Department", "Risk Management Department", "Procurement Department", "Project Management Office", "Information Technology Department", "Engineering Department", "Production Department", "Logistics Department", "Security Department", "Training and Development Department", "Health and Safety Department", "Public Relations Department", "Investor Relations Department", "Corporate Social Responsibility Department", "Internal Audit Department", "Data Analytics Department", "Digital Marketing Department", "E-commerce Department", "Talent Acquisition Department", "Performance Management Department", "Compensation and Benefits Department", "Employee Relations Department", "Organizational Development Department", "Customer Experience Department", "Innovation Department", "Sustainability Department", "Legal Affairs Department", "Government Affairs Department", "Community Outreach Department", "Media Relations Department", "Investor Relations Department", "Diversity and Inclusion Department", "Event Planning Department", "Content Development Department", "Social Media Department"];
-
         return [
-            'name' => fake()->randomElement($units),
+            'name' => fake()->company,
         ];
+    }
+
+    private function randomState(array $names): Factory
+    {
+        return $this->state(function () use ($names) {
+            return [
+                'name' => fake()->randomElement($names),
+            ];
+        });
+    }
+
+    public function directorate(): Factory
+    {
+        $directorates = [
+            'Main Directorate',
+            'Directorate of Finance',
+            'Directorate of Human Resources',
+            'Directorate of Business and Development',
+            'Directorate of Operations',
+        ];
+
+        return $this->randomState($directorates);
+    }
+
+    public function division(): Factory
+    {
+        $divisions = [
+            'Division of Financial Planning',
+            'Division of Payroll',
+            'Division of Recruitment',
+            'Division of Employee Relations',
+            'Division of Software Development',
+            'Division of Network Administration',
+            'Division of Digital Marketing',
+            'Division of Public Relations',
+            'Division of Product Research',
+            'Division of Process Improvement',
+            'Division of Logistics',
+            'Division of Customer Support',
+        ];
+
+        return $this->randomState($divisions);
+    }
+
+    public function department(): Factory
+    {
+        $departments = [
+            'Department of Budgeting and Forecasting',
+            'Department of Accounts Payable',
+            'Department of Accounts Receivable',
+            'Department of Talent Acquisition',
+            'Department of Employee Benefits',
+            'Department of IT Support',
+            'Department of Software Engineering',
+            'Department of Network Security',
+            'Department of Social Media',
+            'Department of Content Creation',
+            'Department of Market Research',
+        ];
+
+        return $this->randomState($departments);
     }
 }
