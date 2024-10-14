@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Employee;
 use App\Models\Organization;
 use App\Models\Position;
+use App\Models\Subgroup;
 use App\Models\Unit;
 use Illuminate\Database\Seeder;
 
@@ -42,8 +43,9 @@ class DatabaseSeeder extends Seeder
             $directorates = Unit::factory()->directorate()->count(2)->create(['organization_id' => $organization->id]);
 
             $directorates->each(function ($directorate) use ($organization) {
+
                 // Create positions and its employees for each directorate
-                $this->createPositionsAndEmployees($directorate->id, 1);
+                $this->createPositionsAndEmployees($directorate->id, $organization->id, 1);
 
                 // Create 2 'division level' units for each directorate
                 $divisions = Unit::factory()->division()->count(2)->create(['organization_id' => $organization->id]);
@@ -54,37 +56,49 @@ class DatabaseSeeder extends Seeder
                     $division->save();
 
                     // Create positions and its employees for each division
-                    $this->createPositionsAndEmployees($division->id, 2);
+                    $this->createPositionsAndEmployees($division->id, $organization->id, 2);
 
                     // Create 2 'department level' units for each division
                     $departments = Unit::factory()->department()->count(2)->create(['organization_id' => $organization->id]);
 
-                    $departments->each(function ($department) use ($division) {
+                    $departments->each(function ($department) use ($division, $organization) {
                         // Set department's parent to previous division
                         $department->parent_id = $division->id;
                         $department->save();
 
                         // Create positions and its employees for each department
-                        $this->createPositionsAndEmployees($department->id, 2);
+                        $this->createPositionsAndEmployees($department->id, $organization->id, 2);
                     });
                 });
             });
         });
     }
 
-    private function createStructuralPositionAndEmployee($unit_id): void
+    private function createStructuralPositionAndEmployee($unit_id, $organization_id): void
     {
+        // Create structural subgroups for the directorate
+        $subgroup = Subgroup::factory()->structural()->create(['organization_id' => $organization_id]);
+
         // Create 1 'structural' position for each department
-        $structural = Position::factory()->structural()->create(['unit_id' => $unit_id]);
+        $structural = Position::factory()->structural()->create([
+            'unit_id' => $unit_id,
+            'subgroup_id' => $subgroup->id,
+        ]);
 
         // Create 1 employee for 'structural' position
         Employee::factory()->create(['position_id' => $structural->id]);
     }
 
-    private function createNonStructuralPositionsAndEmployees($unit_id, $ns_count): void
+    private function createNonStructuralPositionsAndEmployees($unit_id, $organization_id, $ns_count): void
     {
+        // Create non structural subgroups for the directorate
+        $subgroup = Subgroup::factory()->nonStructural()->create(['organization_id' => $organization_id]);
+
         // Create 3 'non structural' positions for each department
-        $nonStructurals = Position::factory()->nonStructural()->create(['unit_id' => $unit_id]);
+        $nonStructurals = Position::factory()->nonStructural()->create([
+            'unit_id' => $unit_id,
+            'subgroup_id' => $subgroup->id,
+        ]);
 
         // Create 1 to 3 employees for each non-structural position
         $nonStructurals->each(function ($position) use ($ns_count) {
@@ -92,9 +106,9 @@ class DatabaseSeeder extends Seeder
         });
     }
 
-    private function createPositionsAndEmployees($unit_id, $ns_count): void
+    private function createPositionsAndEmployees($unit_id, $organization_id, $ns_count): void
     {
-        $this->createStructuralPositionAndEmployee($unit_id);
-        $this->createNonStructuralPositionsAndEmployees($unit_id, $ns_count);
+        $this->createStructuralPositionAndEmployee($unit_id, $organization_id);
+        $this->createNonStructuralPositionsAndEmployees($unit_id, $organization_id, $ns_count);
     }
 }

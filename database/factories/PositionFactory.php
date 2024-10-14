@@ -17,7 +17,6 @@ class PositionFactory extends Factory
     public function definition(): array
     {
         return [
-            'subgroup' => 'XX',
             'is_structural' => true,
             'title' => fake()->jobTitle,
         ];
@@ -29,13 +28,10 @@ class PositionFactory extends Factory
             'Sales Manager', 'Marketing Manager', 'Finance Manager', 'Operations Manager', 'Human Resources Manager', 'Technology Manager', 'Business Development Manager', 'Customer Service Manager', 'Research and Development Manager', 'Project Manager', 'Product Manager', 'Account Manager', 'Client Relationship Manager', 'IT Manager', 'Compliance Manager', 'Training Manager', 'Development Manager', 'Strategic Planning Manager'
         ];
 
-        $structuralGroups = ['AS', 'BS', 'CS', 'DS', 'ES'];
-
-        return $this->state(function (array $attributes) use ($structuralPositions, $structuralGroups) {
+        return $this->state(function (array $attributes) use ($structuralPositions) {
             return [
                 'is_structural' => true,
                 'title' => fake()->randomElement($structuralPositions),
-                'subgroup' => fake()->randomElement($structuralGroups),
             ];
         });
     }
@@ -44,13 +40,10 @@ class PositionFactory extends Factory
     {
         $nonStructuralPositions = ['Operations Coordinator', 'Sales Coordinator', 'Marketing Coordinator', 'Finance Coordinator', 'Staff'];
 
-        $nonStructuralGroups = ['AF', 'BF', 'CF', 'DF', 'EF', 'F'];
-
-        return $this->state(function (array $attributes) use ($nonStructuralPositions, $nonStructuralGroups) {
+        return $this->state(function (array $attributes) use ($nonStructuralPositions) {
             return [
                 'is_structural' => false,
                 'title' => fake()->randomElement($nonStructuralPositions),
-                'subgroup' => fake()->randomElement($nonStructuralGroups),
             ];
         });
     }

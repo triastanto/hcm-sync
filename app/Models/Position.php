@@ -30,6 +30,11 @@ class Position extends Model
         return $this->belongsTo(Unit::class);
     }
 
+    public function subgroup(): BelongsTo
+    {
+        return $this->belongsTo(Subgroup::class);
+    }
+
     public static function findHeadOf($unit_id): Position
     {
         return self::where('unit_id', $unit_id)
