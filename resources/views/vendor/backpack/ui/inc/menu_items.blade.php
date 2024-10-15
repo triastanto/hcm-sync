@@ -4,5 +4,6 @@
 <x-backpack::menu-item title="Users" icon="la la-question" :link="backpack_url('user')" />
 <x-backpack::menu-item title="Organizations" icon="la la-question" :link="backpack_url('organization')" />
 <x-backpack::menu-item title="Units" icon="la la-question" :link="backpack_url('unit')" />
+<x-backpack::menu-item title="Subgroups" icon="la la-question" :link="backpack_url('subgroup')" />
 <x-backpack::menu-item title="Positions" icon="la la-question" :link="backpack_url('position')" />
 <x-backpack::menu-item title="Employee" icon="la la-question" :link="backpack_url('employee')" />

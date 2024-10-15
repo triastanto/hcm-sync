@@ -21,6 +21,7 @@ class PositionCrudController extends CrudController
     use \Backpack\ReviseOperation\ReviseOperation;
 
     private string $unit_id;
+    private string $subgroup_id;
 
     public function setup()
     {
@@ -32,6 +33,11 @@ class PositionCrudController extends CrudController
             $this->unit_id = request()->query('unit_id');
             CRUD::addClause('where', 'unit_id', '=', $this->unit_id);
         }
+
+        if (request()->filled('subgroup_id')) {
+            $this->subgroup_id = request()->query('subgroup_id');
+            CRUD::addClause('where', 'subgroup_id', '=', $this->subgroup_id);
+        }
     }
 
     protected function setupListOperation(): void
@@ -42,6 +48,7 @@ class PositionCrudController extends CrudController
             'type' => 'text',
             'limit' => 80,
         ]);
+        CRUD::addColumn('subgroup');
         CRUD::addColumn([
             'name' => 'unit',
             'label' => 'Unit',

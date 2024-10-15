@@ -8,12 +8,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Venturecraft\Revisionable\RevisionableTrait;
 
 class Subgroup extends Model
 {
     use CrudTrait;
     use HasFactory;
     use HasUuids;
+    use RevisionableTrait;
 
     protected $guarded = [];
 
@@ -22,7 +24,7 @@ class Subgroup extends Model
         return $this->belongsTo(Organization::class);
     }
 
-    public function position(): HasMany
+    public function positions(): HasMany
     {
         return $this->hasMany(Position::class);
     }
