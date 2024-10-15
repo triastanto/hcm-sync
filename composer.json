@@ -4,9 +4,16 @@
     "description": "The skeleton application for the Laravel framework.",
     "keywords": ["laravel", "framework"],
     "license": "MIT",
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://repo.backpackforlaravel.com/"
+        }
+    ],
     "require": {
         "php": "^8.2",
         "backpack/crud": "^6.7",
+        "backpack/pro": "^2.2",
         "backpack/revise-operation": "^2.0",
         "backpack/theme-tabler": "^1.2",
         "laravel/framework": "^11.0",

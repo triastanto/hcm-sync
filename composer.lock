@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d94a9b2ab4a5ccf89d8f379cc4d1bb30",
+    "content-hash": "ad385a47fe0385067a0d13c1696d8f57",
     "packages": [
         {
             "name": "backpack/basset",
@@ -173,6 +173,75 @@
                 "source": "https://github.com/Laravel-Backpack/CRUD/tree/6.7.12"
             },
             "time": "2024-05-06T17:24:09+00:00"
+        },
+        {
+            "name": "backpack/pro",
+            "version": "2.2.20",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:Laravel-Backpack/PRO.git",
+                "reference": "3694385aa44de6112e6ff2bee56d5ebf5017ce0f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://repo.backpackforlaravel.com/dist/backpack/pro/backpack-pro-3694385aa44de6112e6ff2bee56d5ebf5017ce0f-zip-05a635.zip",
+                "reference": "3694385aa44de6112e6ff2bee56d5ebf5017ce0f",
+                "shasum": "a793a13db5ce45baaeee86a210f4bc05ad4c8788"
+            },
+            "require": {
+                "backpack/crud": "^6.0.1"
+            },
+            "require-dev": {
+                "orchestra/testbench": "~5|~6",
+                "phpunit/phpunit": "~9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Backpack\\Pro\\AddonServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Backpack\\Pro\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Backpack\\Pro\\Tests\\": "tests"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "vendor/bin/phpunit --testdox"
+                ]
+            },
+            "license": [
+                "Proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Cristian Tabacitu",
+                    "email": "cristian.tabacitu@backpackforlaravel.com",
+                    "homepage": "https://backpackforlaravel.com"
+                }
+            ],
+            "description": "Operations, Fields, Columns, Filters and Widgets for not-so-simple admin panels.",
+            "homepage": "https://github.com/digitallyhappy/backpack-pro",
+            "keywords": [
+                "Backpack",
+                "Backpack Addon",
+                "Backpack for Laravel",
+                "Laravel",
+                "Pro"
+            ],
+            "support": {
+                "source": "https://github.com/Laravel-Backpack/PRO/tree/2.2.20",
+                "issues": "https://github.com/Laravel-Backpack/PRO/issues"
+            },
+            "time": "2024-10-04T15:15:15+00:00"
         },
         {
             "name": "backpack/revise-operation",
